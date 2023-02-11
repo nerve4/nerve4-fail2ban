@@ -1,0 +1,22 @@
+---
+# tasks - install_ubuntu.yml for nerve4-fail2ban
+
+- name: Install fail2ban on Ubuntu based hosts
+  ansible.builtin.apt: 
+    name: "fail2ban"
+    state: present
+
+- name: Create fail2ban.conf file
+  ansible.builtin.template:
+    src: ubuntu.jail.local.j2
+    dest: /etc/fail2ban/jail.local
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable service fail2ban, and restart it
+  ansible.builtin.service:
+    name: fail2ban
+    enabled: yes
+  notify:
+    - Restart fail2ban

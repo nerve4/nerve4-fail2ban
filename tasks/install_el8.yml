@@ -1,0 +1,25 @@
+---
+# tasks - install_el8.yml for nerve4-fail2ban
+
+- name: Install fail2ban on RHEL8 based hosts
+  ansible.builtin.dnf: 
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - epel-release
+    - fail2ban
+
+- name: Create fail2ban.conf file
+  ansible.builtin.template:
+    src: rhel8.jail.local.j2
+    dest: /etc/fail2ban/jail.local
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable service fail2ban, and restart it
+  ansible.builtin.service:
+    name: fail2ban
+    enabled: yes
+  notify:
+    - Restart fail2ban
