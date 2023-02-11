@@ -1,0 +1,11 @@
+---
+# tasks - main.yml for nerve4-fail2ban
+
+- include_tasks: install_el8.yml
+  when: 
+    (ansible_distribution == "RedHat" and ansible_distribution_major_version == "8") or
+    (ansible_distribution in "Rocky")
+
+- include_tasks: install_ubuntu.yml
+  when: 
+    - ansible_distribution == "Ubuntu"
